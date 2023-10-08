@@ -1,0 +1,180 @@
+//贪吃蛇
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
+#include <conio.h>
+typedef _SNAKE
+{
+    int x;
+    int y;
+    struct _SNAKE* next;
+}Snake;
+
+Snake* g_pHead = NULL;//头
+
+enum {UP,DOWN,LEFT,RIGHT};
+void GameSart();//开始游戏
+void Welcome();//欢迎
+void CreateMap();//创建地图
+void gotoxy(int x, int y);//设置光标
+void InitSnake();//初始化蛇
+void RunGame();//运行游戏
+void MoveSnake(int direction);//移动蛇
+
+int main()
+{
+
+   GameSart();//
+   RunGame();//
+
+    return 0;
+}
+void GameStart()
+{
+    system("mode con cols=100 lines=40");
+    Welcome();
+    CreateMap();
+    InitSnake();
+}
+
+void Welcome()
+{
+    printf("\n\n\n\n\n\n\n");
+    printf("\t\t\t===================================\n");
+    printf("\t\t\t=\t\t\t\t\t\t\t\t=\n");
+    printf("\t\t\t=\t\t欢迎来到贪吃蛇小游戏\t\t=\n");
+    printf("\t\t\t=\t\t\t\t\t\t=\n");
+    printf("\t\t\t=\t\t\t\t\t=\n");
+    printf("\t\t\t===================================\n");
+    system("pause");
+    system("cls");
+}
+
+
+void CreateMap()
+{
+    for (int i = 0; i < 80; i+=2)
+    {
+        gotoxy(i,0);
+        printf("■");
+        gotoxy(i, 39);
+        printf("■");
+    }
+    for (int i = 0; i < 40; i++)
+    {
+        gotoxy(0, i);
+        printf("■");
+        gotoxy(78, i);
+        printf("■");
+
+    }
+}
+
+void gotoxy(int x, int y)
+{
+    COORD pos = { x,y };
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hOut, pos);
+}
+
+void InitSnake();
+{
+    Snake* temp = (Snake*)malloc(sizeof(Snake));
+   temp->x = 30;
+   temp->y = 25;
+   temp->next = NULL;
+   g_pHead = temp;
+
+       for (int i = 1; i <= 3; i++)
+       {
+           Snake* p = (Snake*)malloc(sizeof(Snake));
+           p->x = 30 + 2 * i;
+           p->y = 15;
+           p->next = NULL;
+           temp->next = p;
+           temp = p;
+       }
+
+       temp = g_pHead;
+       while (temp!=NULL)
+       {
+           gotoxy(temp->x, temp->y);
+           printf("■");
+           temp = temp->next;
+           temp = p;
+    }
+
+
+}
+
+void RunGame()
+{
+    while (1)
+    {
+        char ch= 77;
+        if (kbhit())
+        {
+          char ch = getch();
+          switch (ch);
+          {
+          case 72://UP
+              break;
+          case 75://LEFT
+              break;
+          case 77://RIGHT
+              break;
+          case 80://DOWN
+              break;
+          }
+}
+        MoveSnake();
+        Sleep(300);
+    }
+}
+
+void MoveSnake(int direction)
+{
+    Snake* p = g_pHead;
+    while (p != NULL && p->next != NULL)
+    {
+        p = p->next;
+    }
+
+   
+    Snake* temp = (Snake*)malloc(sizeof(Snake));
+    temp->next = NULL;
+    if (direction == RIGHT)
+    {
+        temp->x = p->x + 2;
+        temp->y = p->y;
+    }
+    else if (direction == LEFT)
+    {
+        temp->x = p->x - 2;
+        temp->y = p->y;
+    }
+    else if (direction == UP)
+    {
+        temp->x = p->x;
+        temp->y = p->y+1;
+    }
+    if (direction == DOWN)
+    {
+        temp->x = p->x - 2;
+        temp->y = p->y;
+
+    }
+  
+    p->next = temp;
+
+
+    gotoxy(temp->x, temp->y);
+    printf("■");
+    gotoxy(g_pHead->x, g_pHead->y);
+    printf("  ");
+
+    temp = g_pHead->next;
+    delete g_pHead;
+    g_pHead = temp;
+
+}
