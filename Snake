@@ -207,7 +207,7 @@ int  snakedie()
 {
 	
 	char grade[100] = { 0 };
-	sprintf(grade, "%d", food.eatgrade);
+	sprintf_s(grade, "%d", food.eatgrade);
 	setbkmode(0);
 	settextcolor(LIGHTBLUE);
 	outtextxy(570, 20, "分数：");
