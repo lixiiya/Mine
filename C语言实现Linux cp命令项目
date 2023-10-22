@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#define BUF_SIZE 4096
+
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        printf("Usage: ./cp <source_file> <dest_file>\n");
+        return 1;
+    }
+
+    int source_fd, dest_fd;
+    ssize_t ret_in, ret_out;
+    char buffer[BUF_SIZE];
+
+    // 打开源文件
+    source_fd = open(argv[1], O_RDONLY);
+    if (source_fd == -1) {
+        perror("open");
+        return 1;
+    }
+
+    // 创建目标文件
+    dest_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    if (dest_fd == -1) {
+        perror("open");
+        return 1;
+    }
+
+    // 读取源文件内容并写入目标文件
+    while ((ret_in = read(source_fd, &buffer, BUF_SIZE)) > 0) {
+        ret_out = write(dest_fd, &buffer, (ssize_t) ret_in);
+        if (ret_out != ret_in) {
+            perror("write");
+            return 1;
+        }
+    }
+
+    // 关闭文件
+    if (close(source_fd) == -1) {
+        perror("close");
+        return 1;
+    }
+    if (close(dest_fd) == -1) {
+        perror("close");
+        return 1;
+    }
+
+    printf("File copied successfully.\n");
+
+    return 0;
+}
